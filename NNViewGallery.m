@@ -6,9 +6,8 @@
 
 #import "NNViewGallery.h"
 
-#import "UIView+FrameEditing.h"
-#import "NAZoomContainer.h"
-#import "NSArray+NAExtensions.h"
+#import "NNZoomContainer.h"
+#import "NNShorts.h"
 
 @interface NNViewGallery () <UIScrollViewDelegate>
 
@@ -18,6 +17,7 @@
 @property (assign, nonatomic) NSInteger strongCurrentItem;
 
 @end
+
 
 @implementation NNViewGallery
 
@@ -114,7 +114,7 @@
     
     if (!self.placedItems[@(index)]) {
         UIView *item = self.itemAtIndex(index);
-        NAZoomContainer *container = [self createZoomContainerByItem:item];
+        NNZoomContainer *container = [self createZoomContainerByItem:item];
         self.placedItems[@(index)] = container;
         [self.scrollView addSubview:container];
     }
@@ -151,13 +151,13 @@
     [self layoutItems];
 }
 
-- (NAZoomContainer *)createZoomContainerByItem:(UIView *)view
+- (NNZoomContainer *)createZoomContainerByItem:(UIView *)view
 {
-    NAZoomContainer *container;
+    NNZoomContainer *container;
     if (self.zoomEnable) {
-        container = [[NAZoomContainer alloc] initWithView:view scale:self.maxScale];
+        container = [[NNZoomContainer alloc] initWithView:view scale:self.maxScale];
     } else {
-        container = [[NAZoomContainer alloc] initWithView:view];
+        container = [[NNZoomContainer alloc] initWithView:view];
     }
     [container takeIntoOneTapRecognizer:self.oneTapRecognizer];
     container.doubleTapScale = self.doubleTapScale;
@@ -182,7 +182,7 @@
     CGFloat height = self.scrollView.height;
     
     [self.placedItems.allKeys enumerateObjects:^(NSNumber *key) {
-        NAZoomContainer *item = self.placedItems[key];
+        NNZoomContainer *item = self.placedItems[key];
         BOOL itemIsHidden = (ABS(self.scrollView.contentOffset.x - item.x) >= self.width);
         if (!hiddenOnly || itemIsHidden) {
             item.frame = CGRectMake(key.integerValue * width, 0, width, height);
